@@ -22,11 +22,23 @@ class LSTMClassifier(nn.Module):
         """
         Perform a forward pass of our model on some input.
         """
+        #print("start of x",x.shape)
         x = x.t()
+        #print("after transpose x",x.shape)
         lengths = x[0,:]
+        #print("lengths.shape",lengths.shape)
         reviews = x[1:,:]
+        #print("reviews.shape",reviews.shape)
         embeds = self.embedding(reviews)
+        #print("embeds.shape",embeds.shape)
         lstm_out, _ = self.lstm(embeds)
+        #print("lstm_out.shape",lstm_out.shape)
         out = self.dense(lstm_out)
+        #print("out after linear.shape",out.shape)
+        #print("out",out) 
+        #print(lengths -1)
+        #print(range(len(lengths)))
         out = out[lengths - 1, range(len(lengths))]
+        #print("out after manipulation",out.shape)
+        
         return self.sig(out.squeeze())
